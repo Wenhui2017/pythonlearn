@@ -1,55 +1,43 @@
 import sys, pygame
-from random import *
+pygame.init()
+screen = pygame.display.set_mode([640, 480])
+background = pygame.Surface(screen.get_size())
+background.fill([255, 255, 255])
+clock = pygame.time.Clock()
 
-class MyBallClass(pygame.sprite.Sprite):
-    def __init__(self, image_file, location, speed):
+class Ball(pygame.sprite.Sprite):
+    def __init__(self, image_file, speed, location):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(image_file)
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = location
         self.speed = speed
-    def move(self):
-        self.rect = self.rect.move(self.speed)
-        if self.rect.left < 0 or self.rect.right > width:
-            self.speed[0] = -self.speed[0]
-
-        if self.rect.top < 0 or self.rect.bottom > height:
-            self.speed[1] = -self.speed[1]
-
-def animate(group):
-    screen.fill([255,255,255])
-    for ball in group:
-        ball.move()
-    for ball in group:
-        group.remove(ball)
         
-        if pygame.sprite.spritecollide(ball, group, False):
-            ball.speed[0] = -ball.speed[0]
-            ball.speed[1] = -ball.speed[1]
+    def move(self):
+        if self.rect.left <= screen.get_rect().left or \
+               self.rect.right >= screen.get_rect().right:
+            self.speed[0] = - self.speed[0]
+        newpos = self.rect.move(self.speed)
+        self.rect = newpos
 
-        group.add(ball)
-        screen.blit(ball.image, ball.rect)
-    pygame.display.flip()
-    
-size = width, height = 640, 480
-screen = pygame.display.set_mode(size)
-screen.fill([255, 255, 255])
-img_file = "beach_ball.png"
-clock = pygame.time.Clock()
-group = pygame.sprite.Group()
-for row in range (0, 2):
-    for column in range (0, 2):
-        location = [column * 180 + 10, row * 180 + 10]
-        speed = [choice([-2, 2]), choice([-2, 2])]
-        ball = MyBallClass(img_file, location, speed)
-        group.add(ball)   
+my_ball = Ball('beach_ball.png', [10, 0], [20, 20])
+pygame.time.set_timer(pygame.USEREVENT, 1000)
+direction = 1
 running = True
 while running:
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-            frame_rate = clock.get_fps()
-            print ("frame rate = ", frame_rate)
-    animate(group)
+        elif event.type == pygame.USEREVENT:
+            my_ball.rect.centery = my_ball.rect.centery + (30*direction)
+            if my_ball.rect.top <= 0 or \
+               my_ball.rect.bottom >= screen.get_rect().bottom:
+                direction = -direction
     clock.tick(30)
+    screen.blit(background, (0, 0))
+    my_ball.move()
+    screen.blit(my_ball.image, my_ball.rect)
+    pygame.display.flip()
 pygame.quit()
+       
