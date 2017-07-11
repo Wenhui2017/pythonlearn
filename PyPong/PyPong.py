@@ -77,6 +77,7 @@ while running:
     if pygame.sprite.spritecollide(paddle, ballGroup, False):
         myBall.speed[1] = -myBall.speed[1]
         hit.play()
+        
     myBall.move()
     
     if not done:
@@ -99,7 +100,7 @@ while running:
             final_text1 = "Game Over"
             final_text2 = "You final score is: " + str(score)
             ft1_font = pygame.font.Font(None, 70)
-            ft1_surf = ft1_font.render(final_text2, 1, (0, 0, 0))
+            ft1_surf = ft1_font.render(final_text1, 1, (0, 0, 0))
             ft2_font = pygame.font.Font(None, 70)
             ft2_surf = ft2_font.render(final_text2, 1, (0, 0, 0))
             screen.blit(ft1_surf, [screen.get_width()/2 - \
@@ -109,6 +110,7 @@ while running:
             pygame.display.flip()
             done = True
             pygame.mixer.music.fadeout(2000)
+            myBall = MyBallClass('wackyball.bmp', [0, 0], [50, 50]) #修复结束后仍有碰撞墙的声音
         else:
              pygame.time.delay(1000)
              new_life.play()
