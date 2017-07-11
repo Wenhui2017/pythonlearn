@@ -1,28 +1,8 @@
-import pygame, sys
+import pygame, sys, random
 from pygame.locals import *
+from MyBall import MyBallClass
 
-class MyBallClass(pygame.sprite.Sprite):
-    def __init__(self, image_file, speed, location):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(image_file)
-        self.rect = self.image.get_rect()
-        self.rect.left, self.rect.top = location
-        self.speed = speed
-        
-    def move(self):
-        global score, score_font, score_surf
-        self.rect = self.rect.move(self.speed)
-        if self.rect.left < 0 or self.rect.right >= screen.get_width():
-            self.speed[0] = - self.speed[0]
-            hit_wall.play()
 
-        if self.rect.top <= 0:
-            self.speed[1] = -self.speed[1]
-            score = score + 1
-            score_surf = score_font.render(str(score), 1, (0, 0, 0))
-            get_point.play()
-
-       
 class MyPaddleClass(pygame.sprite.Sprite):
     def __init__(self, location):
         pygame.sprite.Sprite.__init__(self)
@@ -34,22 +14,20 @@ class MyPaddleClass(pygame.sprite.Sprite):
 pygame.init()
 pygame.mixer.init()
 
+def load_sound(soundfile_name, sound_volume): #定义一个加载并调节音量的函数
+    a = pygame.mixer.Sound(soundfile_name)
+    a.set_volume(sound_volume)
+    return a  
 
-pygame.mixer.music.load("bg_music.mp3")
+pygame.mixer.music.load("./sound_resource/bg_music.mp3")
 pygame.mixer.music.set_volume(0.30)
 pygame.mixer.music.play(-1)
-hit_wall = pygame.mixer.Sound("hit_wall.wav")
-hit_wall.set_volume(0.4)
-get_point = pygame.mixer.Sound("get_point.wav")
-get_point.set_volume(0.2)
-splat = pygame.mixer.Sound("splat.wav")
-splat.set_volume(0.6)
-new_life = pygame.mixer.Sound("new_life.wav")
-new_life.set_volume(0.5)
-game_over = pygame.mixer.Sound("game_over.wav")
-game_over.set_volume(0.6)
-hit = pygame.mixer.Sound("hit_paddle.wav")
-hit.set_volume(0.4)
+hit_wall = load_sound("./sound_resource/hit_wall.wav", 0.4)
+get_point = load_sound("./sound_resource/get_point.wav", 0.2)
+splat = load_sound("./sound_resource/splat.wav", 0.6)
+new_life = load_sound("./sound_resource/new_life.wav", 0.5)
+game_over = load_sound("./sound_resource/game_over.wav",0.6)
+hit = load_sound("./sound_resource/hit_paddle.wav", 0.4)
 screen = pygame.display.set_mode([640,480])
 clock = pygame.time.Clock()
 
@@ -75,9 +53,9 @@ while running:
             paddle.rect.centerx = event.pos[0]
 
     if pygame.sprite.spritecollide(paddle, ballGroup, False):
-        myBall.speed[1] = -myBall.speed[1]
+        myBall.speed[1] = -myBall.speed[1] - random.random()
         hit.play()
-        
+
     myBall.move()
     
     if not done:
@@ -103,10 +81,8 @@ while running:
             ft1_surf = ft1_font.render(final_text1, 1, (0, 0, 0))
             ft2_font = pygame.font.Font(None, 70)
             ft2_surf = ft2_font.render(final_text2, 1, (0, 0, 0))
-            screen.blit(ft1_surf, [screen.get_width()/2 - \
-                                   ft1_surf.get_width()/2, 100])
-            screen.blit(ft2_surf, [screen.get_width()/2 - \
-                                   ft2_surf.get_width()/2, 200])
+            screen.blit(ft1_surf, [screen.get_width()/2 - ft1_surf.get_width()/2, 100])
+            screen.blit(ft2_surf, [screen.get_width()/2 - ft2_surf.get_width()/2, 200])
             pygame.display.flip()
             done = True
             pygame.mixer.music.fadeout(2000)
