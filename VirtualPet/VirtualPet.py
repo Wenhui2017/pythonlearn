@@ -22,12 +22,12 @@ class MyForm(baseclass, formclass):
         self.happiness  = 8
         self.health = 8
         self.forceAwake = False
-        self.sleepImages = ["sleep1.gif","sleep2.gif","sleep3.gif", "sleep4.gif"]  # 用于动画的列表图像
-        self.eatImages = ["eat1.gif", "eat2.gif"]                                  # 
-        self.walkImages = ["walk1.gif", "walk2.gif", "walk3.gif", "walk4.gif"]     #
-        self.playImages = ["play1.gif", "play2.gif"]                               #
-        self.doctorImages = ["doc1.gif", "doc2.gif"]                               #
-        self.nothingImages  = ["pet1.gif", "pet2.gif", "pet3.gif"]                 #
+        self.sleepImages = ["./pic/sleep1.gif","./pic/sleep2.gif","./pic/sleep3.gif", "sleep4.gif"]             # 用于动画的列表图像
+        self.eatImages = ["./pic/eat1.gif", "./pic/eat2.gif"]                                                   # 
+        self.walkImages = ["./pic/walk1.gif", "./pic/walk2.gif", "./pic/walk3.gif", "./pic/walk4.gif"]          #
+        self.playImages = ["./pic/play1.gif", "./pic/play2.gif"]                                                #
+        self.doctorImages = ["./pic/doc1.gif", "./pic/doc2.gif"]                                                #
+        self.nothingImages  = ["./pic/pet1.gif", "./pic/pet2.gif", "./pic/pet3.gif"]                            #
 
         self.imageList = self.nothingImages
         self.imageIndex = 0
